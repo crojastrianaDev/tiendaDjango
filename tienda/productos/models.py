@@ -18,3 +18,12 @@ class Comentario(models.Model):
 
     def __str__(self):
         return "{} {}".format(self.comentario, self.producto)
+
+
+class ImagenesProducto(models.Model):
+    descripcion = models.CharField(max_length=300)
+    producto = models.ForeignKey(Producto, related_name="producto_imagenes",on_delete=models.CASCADE)
+    imagen = models.ImageField(upload_to='imagenes_producto')
+
+    def __str__(self):
+        return "{}".format(self.descripcion)
