@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Producto
+from .models import Producto, Comentario, ImagenesProducto, CarritoCompras
 
-@admin.register(Producto)
+@admin.register(Producto,Comentario,ImagenesProducto,CarritoCompras)
 class AuthorAdmin(admin.ModelAdmin):
     pass
