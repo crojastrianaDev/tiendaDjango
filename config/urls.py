@@ -3,19 +3,48 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
-from django.views.generic import TemplateView
+
+from tienda.users.views import (
+        Indice, ListadoProducto, DetalleProducto, ComentarioProducto,
+        Ingresar, Salir, CambiarPerfil, AniadirCarrito, 
+        ListarCarrito, ListarCarritoPendientes, ListarCarritoFinalizadas,
+        DetailPaymentView, EliminarCarrito, SummaryView, updateCar
+    )
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
-    path(
-        "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
-    ),
-    # Django Admin, use {% url 'admin:index' %}
-    path(settings.ADMIN_URL, admin.site.urls),
-    # User management
-    path("users/", include("tienda.users.urls", namespace="users")),
-    path("accounts/", include("allauth.urls")),
-    # Your stuff: custom urls includes go here
+     path('',Indice.as_view(),name='indice'),
+
+    #usuarios 
+    path('ingresar/',Ingresar.as_view(),name='ingresar'),
+
+    path('salir/',Salir.as_view(),name='salir'),
+
+    path('cambiar_perfil/',CambiarPerfil.as_view(),name='cambiar_perfil'),
+
+    #productos
+    path('listado_productos/',ListadoProducto.as_view(),name='listado_productos'),
+
+    path('detalle_producto/<int:pk>/',DetalleProducto.as_view(),name='detalle_productos'),
+
+    path('crear_comentario/',ComentarioProducto.as_view(),name='crear_comentario'),
+
+    path('aniadir_carrito/',AniadirCarrito.as_view(),name='aniadir_carrito'),
+
+    path('listar_carrito/',ListarCarrito.as_view(),name='listar_carrito'),
+
+    path('listar_pendientes/',ListarCarritoPendientes.as_view(),name='listar_pendientes'),
+
+    path('listar_finalizado/',ListarCarritoFinalizadas.as_view(),name='listar_finalizado'),
+
+    path('eliminar_carrito/<int:pk>/',EliminarCarrito.as_view(),name='eliminar_carrito'),
+
+    #pasarela de compras
+    path('confirmacion/', SummaryView.as_view(), name='confirmation'),
+    path('pagar/',DetailPaymentView.as_view(),name="pagar"),
+    path('cambiar-carrito/', updateCar, name="actualizar_carrito"),
+
+    
+    path(settings.ADMIN_URL, admin.site.urls),  # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
