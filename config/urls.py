@@ -44,9 +44,8 @@ urlpatterns = [
     path('cambiar-carrito/', updateCar, name="actualizar_carrito"),
 
     
-    path(settings.ADMIN_URL, admin.site.urls),
-    
-    # Your stuff: custom urls includes go here
+    path(settings.ADMIN_URL, admin.site.urls),  # Your stuff: custom urls includes go here
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
