@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>
+    
+    tienda
+
+  </title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="/static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="/static/css/tienda.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+
+</head>
+<body>
+  <nav class="white" role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="{% url 'indice' %}" class="brand-logo">Logo</a>
+      <ul class="right hide-on-med-and-down">
+            {% if request.user.is_authenticated %}
+            <li><a href="{% url 'salir' %}">Salir</a></li>
+            {% else %}
+            <li><a href="{% url 'ingresar' %}">Ingresar</a></li>
+            {% endif %}
+            
+            <li><a href="{% url 'listado_productos' %}">Productos</a></li>
+            <li><a href="{% url 'cambiar_perfil' %}">Mi perfil</a></li>
+            <li><a href="{% url 'listar_carrito' %}">Mis compras</a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="sidenav">
+        <li>
+            <a href="{% url 'indice' %}">
+                Logo
+            </a>
+        </li>
+        {% if request.user.is_authenticated %}
+        <li><a href="{% url 'salir' %}">Salir</a></li>
+        {% else %}
+        <li><a href="{% url 'ingresar' %}">Ingresar</a></li>
+        {% endif %}
+        <li><a href="{% url 'listado_productos' %}">Productos</a></li>
+        <li><a href="{% url 'cambiar_perfil' %}">Mi perfil</a></li>
+        <li><a href="{% url 'listar_carrito' %}">Mis compras</a></li>
+      </ul>
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+    </div>
+  </nav>
+
+
+  {% block contenido %}
+
+  {% endblock contenido %}
+
+  {% if request.user.is_authenticated %}
+      <div class="fixed-action-btn">
+        <a href="{% url 'listar_carrito' %}" class="btn-floating btn-large red pulse">
+          <i class="large material-icons">shopping_cart</i>
+        </a>
+        <ul>
+        </ul>
+      </div>
+  
+  {% endif %}
+    
+  <footer class="page-footer teal">
+    <div class="container">
+      <div class="row">
+
+        <div class="col l12 s12">
+          <h5 class="white-text">Somos los mejores!</h5>
+          <p class="grey-text text-lighten-4">
+              Enviamos a todo el país
+          </p>
+
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="footer-copyright">
+      <div class="container">
+          <center>
+                Todos los derechos reservados 2019
+          </center>
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="/static/js/materialize.js"></script>
+    {% block seccionjavascript %}
+      
+    {% endblock seccionjavascript %}
+    <script src="/static/js/init.js"></script>
+  </body>
+</html>

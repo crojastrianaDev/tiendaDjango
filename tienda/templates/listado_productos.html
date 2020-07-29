@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+<link href="/static/css/nouislider.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+<div class="container">
+  <br>
+  <center>
+    <h1>
+      Productos
+    </h1>
+  </center>
+
+  <div class="row">
+    <form action="{% url 'listadoProductos' %}" class="col s12">
+
+        <div class="input-field col s6">
+          <i class="material-icons prefix">search</i>
+          <input name="nombre"  id="buscar" type="text" class="validate">
+          <label for="buscar">Nombre del producto</label>
+        </div>
+
+        <input type="hidden" name="minimo" id="minimo">
+        <input type="hidden" name="maximo" id="maximo">
+
+        <div class="col s6">
+          <label for=""> Precio del producto</label>
+          <br><br>
+          <div id="test-slider"></div>
+        </div>
+        <div class="col s12">
+          <center>
+            <button class="waves-effect waves-light btn-large" type="submit">
+              Buscar
+            </button>
+          </center>
+    </form>
+  </div>
+
+  <div class="row">
+    
+    {% for producto in object_list %}
+      <div class="col s6">
+        <div class="card">
+          <div class="card-image">
+            <div style="width: 441px;
+            height: 305px;        
+            background-image: url(/media/{{producto.ProductoDeLaImagen.all.0.imagen}});
+            background-size: cover;
+            background-repeat: no-repeat;
+            max-width: 100%;
+            width: 100%;"></div>
+          </div>
+          <div class="card-content">
+            <p>
+              {{producto.nombre}}
+            </p>
+            <p>
+              {{producto.precio}}
+             </p>
+          </div>
+          <div class="card-action">
+            <center>
+              <a href="{% url 'detelleProducto' producto.pk %}" class="btn waves-effect waves-light btn-large" type="submit">
+                ver
+              </a>
+            </center>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+    <center>
+      <p class="flow-text">
+        No tenemos resultados para tu búsqueda
+      </p>
+    </center>
+    {% endfor %}
+      
+      
+
+
+  </div>
+
+  <div class="row"  >
+		{% if is_paginated %}
+		<center>
+			<ul class="pagination">
+				{% if page_obj.has_previous %}
+				<li class="disabled"><a href="?page={{ page_obj.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+				{% else %}
+				<li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+				{% endif %}
+
+				{% for page in paginator.page_range %}
+				<li class="waves-effect  {% if page == page_obj.number %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+				{% endfor %}
+
+
+				{% if page_obj.has_next %}
+				<li class="waves-effect"><a href="?page={{ page_obj.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+				{% else %}
+				<li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+				{% endif %}
+			</ul>
+		</center>
+		{% endif %}
+
+	</div>
+
+  <br>
+</div>
+
+{% endblock contenido %}
+{% block seccionjavascript %}
+<script src="/static/js/nouislider.min.js"></script>
+<script src="/static/js/wNumb.js"></script>
+<script>
+  $(document).ready(function(){
+    var slider = document.getElementById('test-slider');
+    noUiSlider.create(slider, {
+      start: [{{minimo}}, {{maximo}}],
+      connect: true,
+      step: 1,
+      orientation: 'horizontal', // 'horizontal' or 'vertical'
+      range: {
+        'min': 0,
+        'max': 100
+      },
+      format: wNumb({
+        decimals: 0
+      })
+    });
+    // evento para cuando cambiamos el slider
+    $('#test-slider')[0].noUiSlider.on('change',function(v,handle){
+      $("#minimo").val(v[0])
+      $("#maximo").val(v[1])+
+    });
+  })
+</script>
+{% endblock seccionjavascript %}
+

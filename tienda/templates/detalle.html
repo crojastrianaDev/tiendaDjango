@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<div class="container">
+    <center>    
+        <h1>
+            <span class="new badge" data-badge-caption="">{{object.precio}} $</span>
+            {{object.nombre}}
+        </h1>
+    </center>
+
+    <div class="slider">
+        <ul class="slides">
+            
+            {% for imagen in object.ProductoDeLaImagen.all  %}
+            <li>
+                <img src="/media/{{imagen.imagen}}"> <!-- random image -->
+                <div class="caption center-align">
+                    <h5 class="light grey-text text-lighten-3" >{{imagen.descripcion}}</h5>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        </div>
+
+    <br>
+    <div class="col s8 z-depth-1">
+        <center>
+            {{object.descripción}}
+        </center>
+    </div>
+    <br>
+
+    <ul class="collection">
+        
+        {% for comentario in object.productoComentario.all %}
+            <li class="collection-item">
+                <span class="title">Mensaje</span>
+                <p>
+                    {{comentario.comentario}}
+                    <br>
+                    {{comentario.usuario}} -  {{comentario.fecha}}
+                </p>
+            </li>
+        {% endfor %}
+    </ul>
+    <br>
+
+    <form class="col s12" method="post" action="{% url 'crearComentario' %}">
+        {% csrf_token %}
+        <div class="input-field col s6">
+            <input placeholder="Nombre" id="name" type="text" class="validate" name="usuario">
+            <label for="name">Nombre</label>
+        </div>
+
+        <input type="hidden" name="productofk" value="{{object.pk}}">
+
+        <div class="row">
+            <div class="input-field col s12">
+                <i class="material-icons prefix">mode_edit</i>
+                <textarea id="icon_prefix2" class="materialize-textarea" name="comentario"></textarea>
+                <label for="icon_prefix2">Comentario</label>
+            </div>
+            <div class="input-field col s2">
+                    <button class="waves-effect waves-light btn-large">
+                        Comentar
+                    </button>
+            </div>
+        </div>
+       
+    </form>
+    <div class="fixed-action-btn col s6" style="bottom: 90px;">
+        <form action="{% url 'añadirCarrito' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="usuario" value="{{request.user.pk}}">
+            <input type="hidden" name="producto" value="{{object.pk}}">
+            <input type="hidden" name="precio" value="{{object.precio}}">
+            
+            <button class="btn-floating btn-large red pulse">
+                <i class="large material-icons">add_shopping_cart</i>
+            </button>
+        </form>
+        
+        <ul>
+        </ul>
+    </div>
+</div>
+
+ {% endblock contenido %}

@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block contenido %}
+<main>
+    <center>
+        <div class="selectio"></div>
+        <div class="container">
+            <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE; width: 60%;"> 
+                <form class="col s12" method="POST">
+                    {% csrf_token %}
+                    <div class='row'>
+     
+                        <div class="row">
+                            <h1>
+                                Registrarse
+                            </h1>
+                        </div>
+                        
+                        <div class="row">
+                            <label for="">Ejemplo usuario@tienda.com</label>
+                            {{ form.as_p }}   
+                        </div>
+                        
+                        <center>
+                            <div class='row'>
+                                <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect'>Registrarse</button>
+                            </div>
+                        </center>
+                        
+
+                </form>
+            </div>
+
+        </div>
+    </center>
+
+</main>
+  <!-- <form class="col s12" method="POST">
+  {% csrf_token %}
+    {{ form.as_p }}   
+    <button type="submit">Registrarme</button> 
+     </form>  -->
+  <!--
+ <main>
+    <center>
+        <div class="section"></div>
+        <div class="container">
+            <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE; width: 60%;">
+     
+                <form class="col s12" method="POST">
+                    {% csrf_token %}
+                    <div class='row'>
+     
+                        <div class="row">
+                            <h1>
+                                Registrarse
+                            </h1>
+                        </div>
+                        
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <input class='validate login__form' type='email' name='username' equired="required" />
+                                <label for='email'>Correo del usuario</label>
+                            </div>
+                        </div>
+
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <input class='form-group' type='text' name='first_name' required="required" />
+                                <label >Nombre</label>
+                            </div>
+                        </div>
+
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <input class='form-group' type='text' name='last_name' required="required" />
+                                <label>Apellidos</label>
+                            </div>
+                        </div>
+                        
+                         <div class='row'>
+                            <div class='input-field col s12'>
+                                <input class='validate login__form' type='email' name='email' required="required" />
+                                <label for='email'>Ingresa tu correo</label>
+                            </div>
+                        </div>
+
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <input class='' type='text' name='telefono' required="required" />
+                                <label >Teléfono</label>
+                            </div>
+                        </div>
+
+                        <div class='row'>
+                            <div class='input-field col s12'>
+                                <input class='validate login__form' type='password' name='password'  required="required" />
+                                <label for='password'>Ingresa tu contraseña</label>
+                            </div>
+                        </div>
+
+                         <div class='row'>
+                            <div class='input-field col s12'>
+                                <input class='validate login__form' type='password' name='password' required="required" />
+                                <label for='password'>Confirma tu contraseña</label>
+                            </div>
+                        </div>
+     
+                        <center>
+                            <div class='row'>
+                                <button type='submit' name='btn_login' class='col s12 btn btn-large waves-effect'>Registrarse</button>
+                            </div>
+                        </center>
+                    </form>
+                </div>
+            </div>
+        </center>
+    </main>
+    
+-->
+{% endblock contenido %}

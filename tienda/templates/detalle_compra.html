@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<div class="container">
+    <br>
+
+    <center>
+      <h1>
+        Detalle de la compra
+      </h1>
+    </center>
+
+    <div class="row">
+      <div class="col s12">
+
+        <table>
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Precio</th>
+            </tr>
+          </thead>
+      
+          
+          {% for carrito in request.user.carrito_usuario.all %}
+            {% if carrito.comprado == False and carrito.pendiente == False %}
+              <tbody>
+                <tr>
+                  <td>{{carrito.producto}}</td>
+                  <td>{{carrito.precio}}</td>
+                </tr>
+              </tbody>
+            {% endif %}
+          {% endfor %}
+            
+          
+        </table>
+        <form id="datos-envio">
+            <div class="input-field col s12">
+                <input placeholder="Placeholder" id="direccion" type="text" class="validate" required="required">
+                <label for="direccion">Dirección de envio</label>
+              </div>
+            <br>
+            <center>
+              <button class="waves-effect waves-light btn-large" id="btn-submit">
+                Pagar
+              </button>
+            </center>
+            <!-- preloder el giro que esta cargando-->
+            <center>
+                <div class="preloader-wrapper big active" id="preloader-form" style="display:none;">
+                    <div class="spinner-layer spinner-blue-only">
+                      <div class="circle-clipper left">
+                        <div class="circle"></div>
+                      </div><div class="gap-patch">
+                        <div class="circle"></div>
+                      </div><div class="circle-clipper right">
+                        <div class="circle"></div>
+                      </div>
+                    </div>
+                  </div>
+              </center>
+        </form>
+
+      </div>
+    </div>
+ 
+
+    <br>
+  </div>
+
+
+<form id="buy" action="{{url}}" method="POST">
+  <input name="merchantId"      type="hidden"  value="{{merchant_id}}"   >
+  <input name="accountId"       type="hidden"  value="{{account_id}}" >
+  <input name="description"     type="hidden"  value="{{description}}"  >
+  <input name="referenceCode"   type="hidden"  value="{{reference_code}}" >
+  <input name="amount"          type="hidden"  value="{{amount}}"   >
+  <input name="tax"             type="hidden"  value="{{tax}}"  >
+  <input name="taxReturnBase"   type="hidden"  value="{{taxReturn_base}}" >
+  <input name="currency"        type="hidden"  value="{{currency}}" >
+  <input name="signature"       type="hidden"  value="{{signature}}"  >
+  <input name="test"            type="hidden"  value="{{test}}" >
+  <input name="buyerEmail"      type="hidden"  value="{{buyer_email}}" >
+  <input name="responseUrl"     type="hidden"  value="{{confirmation_url}}" >
+  <input name="confirmationUrl" type="hidden"  value="{{confirmation_url}}">
+  <input name="shippingCountry" type="hidden"  value="CO">
+  <input name="shippingCity"    type="hidden"  value="">
+  <input name="shippingAddress" type="hidden"  value="">
+</form>
+{% endblock contenido %}
+
+{% block seccionjavascript %}
+<script>
+  $(document).ready(function(){
+    $("#datos-envio").submit(function(val){
+      val.preventDefault();
+      $("#preloader-form").show();
+      $("#btn-submit").hide();
+      $.ajax({
+        url: '{% url 'actualizar_carrito' %}',
+        type: 'POST',
+        dataType: 'json',
+        data: {"direction":$("#direccion").val()},
+        headers: {
+          'X-CSRFToken': '{{csrf_token}}'
+        },
+      })
+      .done(function(data) {
+        $("input[name='amount']").val(data["precio"]);
+        $("input[name='referenceCode']").val(data["identifier"]);
+        $("input[name='signature']").val(data["signature"]);
+        //send to payu
+        $("#buy").submit();
+      })
+      .fail(function(data) {
+        $("#preloader-form").hide();
+        $("#btn-submit").show();
+        M.toast({html: "Lo sentimos tenemos un error, por favor intenta más tarde", displayLength: 10000});
+      });
+    });
+    
+
+  });
+</script>
+{% endblock seccionjavascript %}
