@@ -27,3 +27,17 @@ class ImagenesProducto(models.Model):
 
     def __str__(self):
         return "{}".format(self.descripcion)
+
+class CarritoCompras(models.Model):
+    producto = models.ForeignKey(Producto, related_name="producto_carrito",on_delete=models.CASCADE)
+    usuario = models.ForeignKey(get_user_model(), related_name="carrito_usuario",on_delete=models.CASCADE)
+    precio = models.IntegerField()
+    identificador = models.IntegerField(null=True)
+    direccion = models.CharField(max_length=300)
+    datos_payu = models.TextField()
+    comprado = models.BooleanField(default=False)
+    pendiente = models.BooleanField(default=False)
+
+
+    def __str__(self):
+        return "{} {}".format(self.usuario, self.producto)
