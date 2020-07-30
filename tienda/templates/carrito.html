@@ -15,7 +15,7 @@
           href="#carrito" 
           {% endif %}
 
-          onclick="location.href='{% url 'listarCarrito' %}'">Mi carrito de compras</a></li>
+          onclick="location.href='{% url 'listar_carrito' %}'">Mi carrito de compras</a></li>
         
           <li class="tab col s4"><a 
 
@@ -26,7 +26,7 @@
           href="#carrito" 
           {% endif %}
 
-          onclick="location.href='{% url 'listarPendientes' %}'">Mis compras pendientes</a></li>
+          onclick="location.href='{% url 'listar_pendientes' %}'">Mis compras pendientes</a></li>
         
           <li class="tab col s4"><a 
 
@@ -37,7 +37,7 @@
           href="#carrito" 
           {% endif %}
 
-          onclick="location.href='{% url 'listarFinalizado' %}'">Mis compras realizadas</a></li>
+          onclick="location.href='{% url 'listar_finalizado' %}'">Mis compras realizadas</a></li>
       </ul>
     </div>
     <div id="carrito-{{tab}}" class="col s12">
@@ -63,7 +63,7 @@
               <div>
                 {{carrito.producto.nombre}} - {{carrito.precio}} $
                 {% if tab == 'sincomprar' %}
-                  <form method="post" action="{% url 'eliminarCarrito' carrito.pk %}">
+                  <form method="post" action="{% url 'eliminar_carrito' carrito.pk %}">
                     {% csrf_token %}
                     <button type="submit" class="btn secondary-content">
                       <i class="material-icons">delete</i>

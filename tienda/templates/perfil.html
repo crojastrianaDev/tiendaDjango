@@ -1,22 +1,16 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block contenido %}
-
- <div class="container">
-    <br>
-    <center>
-      <img src="/static/imagenes/imagen.jpeg" alt="" class="responsive-img" width="200" height="200">
-    </center>
-    
-    <form action="{% url 'modificarPerfil' %}" method="POST" class="col s12">
+<div class="container">
+    <form action="{% url 'cambiar_perfil' %}" method="POST" class="col s12">
       {% csrf_token %}
-      <div class="input-field col s12">                      <!--Si no tiene nada por defecto ponga un vaciop-->
+      <div class="input-field col s12">
         <input id="nombre" type="text" class="validate" name="first_name" value="{{object.first_name|default_if_none:""}}">
         <label for="nombre">Nombre(s)</label>
       </div>
 
       <div class="input-field col s12">
-        <input id="apellidos" type="text" class="validate" name='last_name' value="{{object.last_name|default_if_none:""}}">
+        <input id="apellidos" type="text" class="validate" name="last_name" value="{{object.last_name|default_if_none:""}}">
         <label for="apellidos">Apellidos</label>
       </div>
 
@@ -32,14 +26,11 @@
 
       <center>
         <button class="waves-effect waves-light btn-large" type="submit">
-          Guardar Cambios
+          Guardar
         </button>
       </center>
 
     </form>
     <br>
   </div>
-
-
 {% endblock contenido %}
-

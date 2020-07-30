@@ -1,46 +1,7 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>
-    
-    tienda
+{% extends "base.html" %}
 
-  </title>
-
-  <!-- CSS  -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="css/tienda.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-
-</head>
-<body>
-  <nav class="white" role="navigation">
-    <div class="nav-wrapper container">
-      <a id="logo-container" href="#" class="brand-logo">Logo</a>
-      <ul class="right hide-on-med-and-down">
-            <li><a href="#">Productos</a></li>
-            <li><a href="#">Mi perfil</a></li>
-            <li><a href="#">Mis compras</a></li>
-      </ul>
-
-      <ul id="nav-mobile" class="sidenav">
-        <li>
-            <a href="">
-                Logo
-            </a>
-        </li>
-        <li><a href="#">Productos</a></li>
-        <li><a href="#">Mi perfil</a></li>
-        <li><a href="#">Mis compras</a></li>
-      </ul>
-      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-
-    </div>
-  </nav>
-
-  <div class="container">
+{% block contenido %}
+<div class="container">
     <br>
 
     <center>
@@ -52,9 +13,24 @@
     <div class="row">
       <div class="col s12">
         
-        Referencia: ref
-        <br>
-        Precio: Precio
+          código de referencia: {{request.GET.referenceCode}} <br>
+          Valor total : $ {{request.GET.TX_VALUE}}<br>
+          correo electronico de compra: {{request.GET.buyerEmail}} <br>
+          dirección de destino: {{request.GET.merchant_address}} <br>
+          estado de la compra: 
+          {% if request.GET.transactionState == '4' %}
+          Transacción aprobada
+          {% endif %}
+          {% if request.GET.transactionState == '6' %}
+          Transacción rechazada
+          {% endif %}
+          {% if request.GET.transactionState == '104' %}
+          Error
+          {% endif %}
+          {% if request.GET.transactionState == '7' %}
+          Transacción pendiente
+          {% endif %}
+      
 
       </div>
     </div>
@@ -62,39 +38,7 @@
 
     <br>
   </div>
+{% endblock contenido %}
 
-  
-
-  <footer class="page-footer teal">
-    <div class="container">
-      <div class="row">
-
-        <div class="col l12 s12">
-          <h5 class="white-text">Somos los mejores!</h5>
-          <p class="grey-text text-lighten-4">
-              Enviamos a todo el país
-          </p>
-
-
-        </div>
-
-      </div>
-    </div>
-
-    <div class="footer-copyright">
-      <div class="container">
-          <center>
-                Todos los derechos reservados 2019
-          </center>
-      </div>
-    </div>
-  </footer>
-
-
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="js/materialize.js"></script>
-  <script src="js/init.js"></script>
-
-  </body>
-</html>
+{% block seccionjavascript %}
+{% endblock seccionjavascript %}

@@ -11,7 +11,7 @@
   </center>
 
   <div class="row">
-    <form action="{% url 'listadoProductos' %}" class="col s12">
+    <form action="{% url 'listado_productos' %}" class="col s12">
 
         <div class="input-field col s6">
           <i class="material-icons prefix">search</i>
@@ -23,7 +23,7 @@
         <input type="hidden" name="maximo" id="maximo">
 
         <div class="col s6">
-          <label for=""> Precio del producto</label>
+          <label for="">Precio del producto</label>
           <br><br>
           <div id="test-slider"></div>
         </div>
@@ -33,18 +33,20 @@
               Buscar
             </button>
           </center>
+        </div>
+
     </form>
   </div>
 
   <div class="row">
     
     {% for producto in object_list %}
-      <div class="col s6">
+      <div class="col s4">
         <div class="card">
           <div class="card-image">
             <div style="width: 441px;
-            height: 305px;        
-            background-image: url(/media/{{producto.ProductoDeLaImagen.all.0.imagen}});
+            height: 305px;
+            background-image: url(/media/{{producto.producto_imagenes.all.0.imagen}});
             background-size: cover;
             background-repeat: no-repeat;
             max-width: 100%;
@@ -54,13 +56,10 @@
             <p>
               {{producto.nombre}}
             </p>
-            <p>
-              {{producto.precio}}
-             </p>
           </div>
           <div class="card-action">
             <center>
-              <a href="{% url 'detelleProducto' producto.pk %}" class="btn waves-effect waves-light btn-large" type="submit">
+              <a href="{% url 'detalle_productos' producto.pk %}" class="waves-effect waves-light btn btn-large">
                 ver
               </a>
             </center>
@@ -69,7 +68,7 @@
       </div>
     {% empty %}
     <center>
-      <p class="flow-text">
+      <p>
         No tenemos resultados para tu búsqueda
       </p>
     </center>
@@ -80,7 +79,7 @@
 
   </div>
 
-  <div class="row"  >
+  <div class="row">
 		{% if is_paginated %}
 		<center>
 			<ul class="pagination">
@@ -106,9 +105,9 @@
 
 	</div>
 
+
   <br>
 </div>
-
 {% endblock contenido %}
 {% block seccionjavascript %}
 <script src="/static/js/nouislider.min.js"></script>
@@ -132,9 +131,8 @@
     // evento para cuando cambiamos el slider
     $('#test-slider')[0].noUiSlider.on('change',function(v,handle){
       $("#minimo").val(v[0])
-      $("#maximo").val(v[1])+
+      $("#maximo").val(v[1])
     });
   })
 </script>
 {% endblock seccionjavascript %}
-
