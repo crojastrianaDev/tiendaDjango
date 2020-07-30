@@ -8,7 +8,7 @@ from tienda.users.views import (
         Indice, ListadoProducto, DetalleProducto, ComentarioProducto,
         Ingresar, Salir, CambiarPerfil, AniadirCarrito, 
         ListarCarrito, ListarCarritoPendientes, ListarCarritoFinalizadas,
-        DetailPaymentView, EliminarCarrito, SummaryView, updateCar
+        DetailPaymentView, EliminarCarrito, SummaryView, updateCar, RegistroUsuarios
     )
 
 urlpatterns = [
@@ -37,6 +37,8 @@ urlpatterns = [
     path('listar_finalizado/',ListarCarritoFinalizadas.as_view(),name='listar_finalizado'),
 
     path('eliminar_carrito/<int:pk>/',EliminarCarrito.as_view(),name='eliminar_carrito'),
+
+    path('registrar', RegistroUsuarios.as_view(), name="registrar"),
 
     #pasarela de compras
     path('confirmacion/', SummaryView.as_view(), name='confirmation'),

@@ -5,7 +5,7 @@ from django.views.generic import DetailView, ListView, RedirectView, UpdateView,
 from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
-
+from tienda.users.forms import FormularioRegistro 
 
 from django.db.models import Q, Max, Min
 
@@ -91,6 +91,12 @@ class Ingresar(LoginView):
 	def get_success_url(self):
 		return reverse('indice')
 
+class RegistroUsuarios(CreateView):
+    model = User
+    template_name = 'registrar.html'
+    form_class = FormularioRegistro
+    success_url = reverse_lazy('ingresar')
+
 class CambiarPerfil(LoginRequiredMixin, UpdateView):
     model = User
     fields = ('telefono','last_name','first_name','email',)
@@ -104,14 +110,14 @@ class CambiarPerfil(LoginRequiredMixin, UpdateView):
 class AniadirCarrito(LoginRequiredMixin, CreateView):
     model = CarritoCompras
     fields = ('usuario','producto','precio',)
-    success_url = reverse_lazy('indice')
+    success_url = reverse_lazy('listar_carrito')
     login_url = 'ingresar'
 
 
 class EliminarCarrito(LoginRequiredMixin,DeleteView):
     queryset = CarritoCompras.objects.filter(comprado=False)
     model = CarritoCompras
-    success_url = reverse_lazy('indice')
+    success_url = reverse_lazy('listar_carrito')
     login_url = 'ingresar'
 
 class ListarCarrito(LoginRequiredMixin,ListView):

@@ -1,5 +1,6 @@
 from django.contrib.auth import forms, get_user_model
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
@@ -28,3 +29,22 @@ class UserCreationForm(forms.UserCreationForm):
             return username
 
         raise ValidationError(self.error_messages["duplicate_username"])
+
+class FormularioRegistro(UserCreationForm):
+    
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'email',
+            'telefono',
+        ]
+        labels = {
+            'username': 'Nombre de usuario',
+             'first_name': 'Nombre',
+             'last_name': 'Apellidos',
+             'email': 'Correo',
+             'telefono': 'Teléfono',
+        }
