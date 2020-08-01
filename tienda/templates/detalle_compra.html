@@ -68,7 +68,7 @@
     <br>
   </div>
 
-
+<!--Formulario oculto de payu-->
 <form id="buy" action="{{url}}" method="POST">
   <input name="merchantId"      type="hidden"  value="{{merchant_id}}"   >
   <input name="accountId"       type="hidden"  value="{{account_id}}" >
@@ -88,12 +88,13 @@
   <input name="shippingAddress" type="hidden"  value="">
 </form>
 {% endblock contenido %}
-
+<!--Cuando el formulario lo envien, se envia y se carga el formulario de pago-->
 {% block seccionjavascript %}
 <script>
   $(document).ready(function(){
     $("#datos-envio").submit(function(val){
       val.preventDefault();
+      <!--ocultamos pagar y cargamos el preloader para consumir la api sin recargar la página-->
       $("#preloader-form").show();
       $("#btn-submit").hide();
       $.ajax({
@@ -104,13 +105,13 @@
         headers: {
           'X-CSRFToken': '{{csrf_token}}'
         },
-      })
+      })<!--enviamos datos de payu y la firma-->
       .done(function(data) {
         $("input[name='amount']").val(data["precio"]);
         $("input[name='referenceCode']").val(data["identifier"]);
         $("input[name='signature']").val(data["signature"]);
         //send to payu
-        $("#buy").submit();
+        $("#buy").submit(); <!--se envia a payu los datos-->
       })
       .fail(function(data) {
         $("#preloader-form").hide();

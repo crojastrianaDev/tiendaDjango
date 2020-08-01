@@ -34,7 +34,7 @@ class CarritoCompras(models.Model):
     precio = models.IntegerField()
     identificador = models.IntegerField(null=True)
     direccion = models.CharField(max_length=300)
-    datos_payu = models.TextField()
+    datos_payu = models.TextField()#por la cantidad de datos
     comprado = models.BooleanField(default=False)
     pendiente = models.BooleanField(default=False)
 

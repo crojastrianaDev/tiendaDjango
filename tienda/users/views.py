@@ -162,15 +162,16 @@ import hashlib
 import requests
 import json
 
-
+#esta clase contiene los datos de la tienda
 class paymentDetail():
-    merchantId = 508029
-    accountId = 512321
-    apiKey = '4Vj8eK4rloUd272L48hsrarnUA'
-    description = "compra realizada desde mi sitio"
-    test = 1
-    url = "https://sandbox.checkout.payulatam.com/ppp-web-gateway-payu"
+    merchantId = 508029 #id de payu
+    accountId = 512326
+    apiKey = '4Vj8eK4rloUd272L48hsrarnUA' 
+    description = "Test PAYU"
+    test = 1 #1 si es test o 0 si no 
+    url = "https://sandbox.checkout.payulatam.com/ppp-web-gateway-payu" #url a de pago payu
 
+#post de pago para ver la confirmación
 @method_decorator(csrf_exempt, name='dispatch')
 class SummaryView(TemplateView):
     template_name = 'fin_detalle_compra.html'
@@ -182,7 +183,7 @@ class SummaryView(TemplateView):
         value                = request.POST['value']
         currency             = request.POST['currency']
         sign                 = request.POST['sign']
-
+        #cuando responde payu que fue o no fue exitoso el pago a fin detalle compra
         value_str = str(value)
 
         value_antes, value_despues = value_str.split(".")
@@ -191,9 +192,9 @@ class SummaryView(TemplateView):
             value= round(float(value),1)
         signature          = hashlib.md5('{}~{}~{}~{}~{}~{}'.format(paymentDetail().apiKey, merchand_id,reference_sale, value, currency,state_pol).encode('utf-8')).hexdigest()
 
-        if signature == request.POST["sign"]:
+        if signature == request.POST["sign"]: #los no comprados loc obramos
             carritoModels = CarritoCompras.objects.filter(identificador=reference_sale,comprado=False)
-            if state_pol == '4':
+            if state_pol == '4': #aprobado lo ponemos como comprado
                 for carrito in carritoModels:
                     carrito.comprado = True
                     carrito.pendiente = False
@@ -211,61 +212,62 @@ class SummaryView(TemplateView):
         else:
             print("el signature no coincide")
 
-        return HttpResponse(status=200)
+        return HttpResponse(status=200) #le devolvemos ewl 200 que todo estuvo bien
 
 
-
+#vista para pagar, que renderiza el template de pago
 class DetailPaymentView(TemplateView):
     template_name = 'detalle_compra.html'
-
+    #datos del pago y toda la info que requiere payu para el pago o cobro
     def get_context_data(self, **kwargs):
         payment = paymentDetail()
         description  = payment.description
         merchantId  = payment.merchantId
         accountId  = payment.accountId
-        context = super(DetailPaymentView, self).get_context_data(**kwargs)
-        referenceCode = ""
+        context = super(DetailPaymentView, self).get_context_data(**kwargs)#el super de la clase
+        referenceCode = "TestPayU"
         amount = 0
-        currency = 'COP'
+        currency = 'COP'#moneda a cobrar
 
         context["merchant_id"] = merchantId
         context["account_id"] = accountId
         context["description"] = description
         context["reference_code"] = referenceCode
-        context["amount"] = amount
-        context["tax"] = 0
-        context["taxReturn_base"] = 0
-        context["currency"] = currency
-        context["signature"] = ""
-        context["test"] = payment.test
-        context["buyer_email"] = self.request.user.email
-        context["response_url"] = 'https://c79ed2a8.ngrok.io/pagar/'
-        context["confirmation_url"] = 'https://c79ed2a8.ngrok.io/confirmacion/'
+        context["amount"] = amount #cobro
+        context["tax"] = 0 #iva
+        context["taxReturn_base"] = 0 #iva
+        context["currency"] = currency #moneda a cobrar
+        context["signature"] = "ba9ffa71559580175585e45ce70b6c37" #firma
+        context["test"] = payment.test #si estamos en test
+        context["buyer_email"] = "test@test.com "#self.request.user.email#email user
+        context["response_url"] = 'https://5beb0989e52a.ngrok.io/pagar/' #url puede ser ngrok
+        context["confirmation_url"] = 'https://5beb0989e52a.ngrok.io/confirmacion/'
         context["url"] = payment.url
         return context
 
-
+#función que actualiza el carro 
 def updateCar(request):
     payment = paymentDetail()
     merchantId  = payment.merchantId
     apiKey = payment.apiKey
-
+    #indentificadores de compra
     maximo_identificador = CarritoCompras.objects.all().order_by('-identificador')[0].identificador
     if maximo_identificador is None:
         maximo_identificador = 0
     maximo_identificador =  maximo_identificador + 1
     currency = 'COP'
-    
+    #todo lo que tiene nu comprado ni pendiente
     carritos = request.user.carrito_usuario.all().filter(comprado = False, pendiente = False)
-
+    #vamos sumando cada producto en carrito
     amount = 0
     for carrito in carritos:
-        carrito.pendiente = True
+        carrito.pendiente = True #le decimos que ahora esta
         carrito.identificador = maximo_identificador
-        carrito.direccion = request.POST["direction"]
+        carrito.direccion = request.POST["direction"]#entregamos la dirreción 
         carrito.save()
         amount = amount + carrito.precio
+        #firma propia para que payU nos reconozaca
     signature = hashlib.md5("{}~{}~{}~{}~{}".format(apiKey,merchantId,maximo_identificador,amount,currency).encode('utf-8') ).hexdigest()
-
+    #respondemos a productos pendientes esperando que payu responda
     response = HttpResponse(json.dumps({"precio":amount,"identifier":maximo_identificador,"signature":signature}), content_type="application/json", status=200)
     return response
