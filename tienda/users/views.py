@@ -225,7 +225,7 @@ class DetailPaymentView(TemplateView):
         merchantId  = payment.merchantId
         accountId  = payment.accountId
         context = super(DetailPaymentView, self).get_context_data(**kwargs)#el super de la clase
-        referenceCode = "TestPayU"
+        referenceCode = ""
         amount = 0
         currency = 'COP'#moneda a cobrar
 
@@ -239,7 +239,7 @@ class DetailPaymentView(TemplateView):
         context["currency"] = currency #moneda a cobrar
         context["signature"] = "ba9ffa71559580175585e45ce70b6c37" #firma
         context["test"] = payment.test #si estamos en test
-        context["buyer_email"] = "test@test.com "#self.request.user.email#email user
+        context["buyer_email"] = self.request.user.email#email user
         context["response_url"] = 'https://5beb0989e52a.ngrok.io/pagar/' #url puede ser ngrok
         context["confirmation_url"] = 'https://5beb0989e52a.ngrok.io/confirmacion/'
         context["url"] = payment.url
@@ -251,7 +251,7 @@ def updateCar(request):
     merchantId  = payment.merchantId
     apiKey = payment.apiKey
     #indentificadores de compra
-    maximo_identificador = CarritoCompras.objects.all().order_by('-identificador')[0].identificador
+    maximo_identificador = CarritoCompras.objects.all().order_by('-identificador')[1].identificador
     if maximo_identificador is None:
         maximo_identificador = 0
     maximo_identificador =  maximo_identificador + 1
